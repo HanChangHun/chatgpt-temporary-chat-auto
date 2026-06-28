@@ -9,13 +9,7 @@
     debug: false
   };
 
-  const optionIds = [
-    "enabled",
-    "redirectNewChats",
-    "patchNewChatLinks",
-    "clickVisibleToggle"
-  ];
-
+  const enabled = document.querySelector("#enabled");
   const status = document.querySelector("#status");
   const applyNow = document.querySelector("#applyNow");
 
@@ -25,15 +19,18 @@
 
   const loadOptions = () => {
     chrome.storage.sync.get(DEFAULT_OPTIONS, (items) => {
-      for (const id of optionIds) {
-        document.querySelector(`#${id}`).checked = Boolean(items[id]);
-      }
+      enabled.checked = Boolean(items.enabled);
     });
   };
 
   const saveOption = (event) => {
     const input = event.currentTarget;
-    chrome.storage.sync.set({ [input.id]: input.checked }, () => {
+    chrome.storage.sync.set({
+      enabled: input.checked,
+      redirectNewChats: true,
+      patchNewChatLinks: true,
+      clickVisibleToggle: true
+    }, () => {
       setStatus("저장됨");
     });
   };
@@ -56,10 +53,7 @@
     });
   };
 
-  for (const id of optionIds) {
-    document.querySelector(`#${id}`).addEventListener("change", saveOption);
-  }
-
+  enabled.addEventListener("change", saveOption);
   applyNow.addEventListener("click", sendApplyMessage);
   loadOptions();
 })();

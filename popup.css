@@ -40,8 +40,7 @@ p {
   font-size: 12px;
 }
 
-.switch-row,
-.options label {
+.switch-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -75,16 +74,6 @@ input[type="checkbox"] {
   height: 18px;
   flex: 0 0 auto;
   accent-color: #0f766e;
-}
-
-.options {
-  display: grid;
-  gap: 9px;
-  padding: 4px 2px;
-}
-
-.options label {
-  color: #27272a;
 }
 
 button {
@@ -125,7 +114,4 @@ input:focus-visible {
     color: #a1a1aa;
   }
 
-  .options label {
-    color: #e4e4e7;
-  }
 }

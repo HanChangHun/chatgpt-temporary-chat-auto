@@ -14,7 +14,7 @@ ChatGPT Temporary Chat Auto keeps new ChatGPT conversations in Temporary Chat mo
 
 It works on `chatgpt.com` and `chat.openai.com`, updates New chat links to include the Temporary Chat URL parameter, and can enable a visible Temporary Chat toggle when the page clearly shows it as off.
 
-The popup lets users turn the automation on or off and control each behavior separately.
+The popup provides one simple on/off control, and the ChatGPT page can show a compact in-page toggle near the Temporary Chat indicator.
 
 Privacy-first behavior:
 

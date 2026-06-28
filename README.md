@@ -8,8 +8,8 @@ This is an unofficial extension and is not affiliated with OpenAI.
 
 - Automatically opens new ChatGPT chats with `temporary-chat=true`.
 - Patches New chat links on `chatgpt.com` and `chat.openai.com`.
-- Can click a visible Temporary Chat toggle only when it is clearly off.
-- Stores only extension preferences in Chrome sync storage.
+- Adds a small in-page toggle near ChatGPT's Temporary Chat indicator.
+- Stores only the single on/off preference in Chrome sync storage.
 
 ## 설치
 
@@ -22,7 +22,8 @@ This is an unofficial extension and is not affiliated with OpenAI.
 - `https://chatgpt.com/`과 `https://chat.openai.com/`에서만 동작합니다.
 - 새 채팅 URL과 New chat 링크에 `temporary-chat=true` 파라미터를 붙입니다.
 - 화면에 Temporary Chat 토글이 보이고 꺼진 상태가 명확할 때만 클릭합니다.
-- 팝업에서 자동 적용, 링크 보정, 보이는 토글 클릭을 따로 끌 수 있습니다.
+- 팝업에서는 자동 적용을 하나의 체크박스로 켜고 끌 수 있습니다.
+- ChatGPT 화면 안의 작은 토글로도 자동 적용을 바로 켜고 끌 수 있습니다.
 
 ## 메모
 

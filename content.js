@@ -1,6 +1,7 @@
 (() => {
   "use strict";
 
+  const INLINE_TOGGLE_ID = "temporary-chat-auto-inline-toggle";
   const TEMPORARY_PARAM = "temporary-chat";
   const DEFAULT_OPTIONS = {
     enabled: true,
@@ -29,6 +30,7 @@
   let options = { ...DEFAULT_OPTIONS };
   let lastHref = location.href;
   let lastApplyAt = 0;
+  let inlineToggleSyncId = 0;
 
   const log = (...args) => {
     if (options.debug) {
@@ -45,6 +47,14 @@
 
       chrome.storage.sync.get(defaults, resolve);
     });
+
+  const normalizeOptions = (items) => ({
+    ...DEFAULT_OPTIONS,
+    ...items,
+    redirectNewChats: true,
+    patchNewChatLinks: true,
+    clickVisibleToggle: true
+  });
 
   const isSupportedOrigin = (url) =>
     url.origin === "https://chatgpt.com" || url.origin === "https://chat.openai.com";
@@ -128,6 +138,204 @@
       style.display !== "none" &&
       Number(style.opacity || "1") > 0
     );
+  };
+
+  const installInlineToggleStyles = () => {
+    if (document.querySelector(`#${INLINE_TOGGLE_ID}-styles`)) {
+      return;
+    }
+
+    const style = document.createElement("style");
+    style.id = `${INLINE_TOGGLE_ID}-styles`;
+    style.textContent = `
+      #${INLINE_TOGGLE_ID} {
+        position: fixed;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 28px;
+        padding: 4px 6px 4px 10px;
+        border: 1px solid rgba(15, 118, 110, 0.22);
+        border-radius: 999px;
+        color: #0f172a;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+        font: 600 12px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: 0;
+        backdrop-filter: blur(12px);
+      }
+
+      #${INLINE_TOGGLE_ID}[hidden] {
+        display: none;
+      }
+
+      #${INLINE_TOGGLE_ID} button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        color: inherit;
+        background: transparent;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      #${INLINE_TOGGLE_ID} .temporary-chat-auto-switch {
+        position: relative;
+        width: 32px;
+        height: 18px;
+        border-radius: 999px;
+        background: #94a3b8;
+        transition: background 120ms ease;
+      }
+
+      #${INLINE_TOGGLE_ID} .temporary-chat-auto-knob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+        transition: transform 120ms ease;
+      }
+
+      #${INLINE_TOGGLE_ID}.is-enabled .temporary-chat-auto-switch {
+        background: #0f766e;
+      }
+
+      #${INLINE_TOGGLE_ID}.is-enabled .temporary-chat-auto-knob {
+        transform: translateX(14px);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #${INLINE_TOGGLE_ID} {
+          border-color: rgba(45, 212, 191, 0.24);
+          color: #f8fafc;
+          background: rgba(24, 24, 27, 0.92);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+      }
+    `;
+
+    document.documentElement.append(style);
+  };
+
+  const createInlineToggle = () => {
+    installInlineToggleStyles();
+
+    let container = document.querySelector(`#${INLINE_TOGGLE_ID}`);
+
+    if (container) {
+      return container;
+    }
+
+    container = document.createElement("div");
+    container.id = INLINE_TOGGLE_ID;
+    container.innerHTML = `
+      <button type="button" aria-label="Toggle automatic Temporary Chat" aria-pressed="true">
+        <span>자동</span>
+        <span class="temporary-chat-auto-switch" aria-hidden="true">
+          <span class="temporary-chat-auto-knob"></span>
+        </span>
+      </button>
+    `;
+
+    container.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+
+    container.querySelector("button").addEventListener("click", () => {
+      setEnabled(!options.enabled);
+    });
+
+    document.documentElement.append(container);
+    return container;
+  };
+
+  const findTemporaryChatMarker = () => {
+    const selectors = [
+      "button",
+      "[role='button']",
+      "[aria-label]",
+      "[title]",
+      "span",
+      "p",
+      "div"
+    ].join(",");
+
+    return Array.from(document.querySelectorAll(selectors))
+      .filter((element) => !element.closest(`#${INLINE_TOGGLE_ID}`))
+      .filter((element) => isVisible(element))
+      .filter((element) => containsAny(getElementText(element), TEMPORARY_CHAT_TEXT))
+      .map((element) => ({
+        element,
+        rect: element.getBoundingClientRect()
+      }))
+      .filter(({ rect }) => rect.top >= 0 && rect.bottom <= window.innerHeight)
+      .sort((a, b) => (a.rect.width * a.rect.height) - (b.rect.width * b.rect.height))[0]?.element || null;
+  };
+
+  const syncInlineToggle = () => {
+    const container = createInlineToggle();
+    const button = container.querySelector("button");
+    const marker = findTemporaryChatMarker();
+
+    container.classList.toggle("is-enabled", options.enabled);
+    button.setAttribute("aria-pressed", String(options.enabled));
+    button.title = options.enabled ? "자동 임시 채팅 켜짐" : "자동 임시 채팅 꺼짐";
+
+    if (!marker) {
+      container.style.top = "84px";
+      container.style.left = "";
+      container.style.right = "16px";
+      return;
+    }
+
+    const markerRect = marker.getBoundingClientRect();
+    const toggleWidth = container.offsetWidth || 74;
+    const left = Math.min(markerRect.right + 8, window.innerWidth - toggleWidth - 12);
+    const top = Math.max(12, markerRect.top + (markerRect.height - container.offsetHeight) / 2);
+
+    container.style.top = `${Math.round(top)}px`;
+    container.style.left = `${Math.round(left)}px`;
+    container.style.right = "";
+  };
+
+  const scheduleInlineToggleSync = () => {
+    if (inlineToggleSyncId) {
+      return;
+    }
+
+    inlineToggleSyncId = window.requestAnimationFrame(() => {
+      inlineToggleSyncId = 0;
+      syncInlineToggle();
+    });
+  };
+
+  const setEnabled = (enabled) => {
+    options = normalizeOptions({ ...options, enabled });
+
+    chrome.storage?.sync?.set({
+      enabled,
+      redirectNewChats: true,
+      patchNewChatLinks: true,
+      clickVisibleToggle: true
+    });
+
+    scheduleInlineToggleSync();
+
+    if (enabled) {
+      applyTemporaryChatMode("inline-toggle");
+      return;
+    }
+
+    restorePatchedLinks();
   };
 
   const getExplicitCheckedState = (element) => {
@@ -302,6 +510,8 @@
   };
 
   const applyTemporaryChatMode = (reason = "apply") => {
+    scheduleInlineToggleSync();
+
     if (!options.enabled) {
       restorePatchedLinks();
       return;
@@ -388,18 +598,23 @@
       if (changed) {
         if (!options.enabled) {
           restorePatchedLinks();
+          scheduleInlineToggleSync();
           return;
         }
 
+        options = normalizeOptions(options);
+        scheduleInlineToggleSync();
         applyTemporaryChatMode("settings-change");
       }
     });
   };
 
   const init = async () => {
-    options = await storageGet(DEFAULT_OPTIONS);
+    options = normalizeOptions(await storageGet(DEFAULT_OPTIONS));
 
     document.addEventListener("click", onCapturedClick, true);
+    window.addEventListener("resize", scheduleInlineToggleSync);
+    window.addEventListener("scroll", scheduleInlineToggleSync, true);
     installMessageHandler();
     installStorageHandler();
     watchLocationChanges();
