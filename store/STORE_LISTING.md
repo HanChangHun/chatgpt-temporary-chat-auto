@@ -64,7 +64,7 @@ Recommended Chrome Web Store data disclosure:
 
 - Do not select any user data collection categories.
 - Certify that data is not sold or used for unrelated purposes.
-- Privacy policy URL: use the public GitHub `PRIVACY.md` URL after the repository is published.
+- Privacy policy URL: `https://github.com/HanChangHun/chatgpt-temporary-chat-auto/blob/main/PRIVACY.md`
 
 ## Test Instructions
 
