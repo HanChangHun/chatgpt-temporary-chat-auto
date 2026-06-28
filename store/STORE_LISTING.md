@@ -81,3 +81,7 @@ No test credentials are required. The reviewer can test with any ChatGPT account
 - Icon: `icons/icon-128.png`
 - Small promotional image: `store/assets/promo-small-440x280.png`
 - Screenshot: `store/assets/screenshot-1280x800.png`
+
+## Korean Submission Checklist
+
+See `store/SUBMISSION_CHECKLIST_KO.md`.
