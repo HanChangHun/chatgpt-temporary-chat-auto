@@ -56,6 +56,12 @@
     clickVisibleToggle: true
   });
 
+  const refreshOptions = async () => {
+    options = normalizeOptions(await storageGet(DEFAULT_OPTIONS));
+    scheduleInlineToggleSync();
+    return options;
+  };
+
   const isSupportedOrigin = (url) =>
     url.origin === "https://chatgpt.com" || url.origin === "https://chat.openai.com";
 
@@ -150,7 +156,7 @@
     style.textContent = `
       #${INLINE_TOGGLE_ID} {
         position: fixed;
-        z-index: 2147483647;
+        z-index: 2147483000;
         display: flex;
         align-items: center;
         gap: 6px;
@@ -173,13 +179,13 @@
       #${INLINE_TOGGLE_ID} button {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         margin: 0;
         padding: 0;
         border: 0;
         color: inherit;
         background: transparent;
-        font: inherit;
+        font: 650 12px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         cursor: pointer;
       }
 
@@ -247,7 +253,7 @@
 
     container.addEventListener("click", (event) => {
       event.preventDefault();
-      event.stopPropagation();
+      event.stopImmediatePropagation();
     });
 
     container.querySelector("button").addEventListener("click", () => {
@@ -259,26 +265,38 @@
   };
 
   const findTemporaryChatMarker = () => {
-    const selectors = [
-      "button",
-      "[role='button']",
-      "[aria-label]",
-      "[title]",
-      "span",
-      "p",
-      "div"
-    ].join(",");
-
-    return Array.from(document.querySelectorAll(selectors))
+    const headingCandidates = Array.from(document.querySelectorAll("h1, h2, h3, [role='heading']"))
       .filter((element) => !element.closest(`#${INLINE_TOGGLE_ID}`))
       .filter((element) => isVisible(element))
-      .filter((element) => containsAny(getElementText(element), TEMPORARY_CHAT_TEXT))
+      .filter((element) => {
+        const text = getElementText(element).replace(/\s+/g, " ").trim().toLowerCase();
+        return TEMPORARY_CHAT_TEXT.some((needle) => text === needle);
+      });
+
+    const labelCandidates = Array.from(document.querySelectorAll("[aria-label], [title]"))
+      .filter((element) => !element.closest(`#${INLINE_TOGGLE_ID}`))
+      .filter((element) => isVisible(element))
+      .filter((element) => {
+        const text = getElementText(element).replace(/\s+/g, " ").trim().toLowerCase();
+        return TEMPORARY_CHAT_TEXT.some((needle) => text === needle);
+      });
+
+    return [...headingCandidates, ...labelCandidates]
       .map((element) => ({
         element,
         rect: element.getBoundingClientRect()
       }))
       .filter(({ rect }) => rect.top >= 0 && rect.bottom <= window.innerHeight)
-      .sort((a, b) => (a.rect.width * a.rect.height) - (b.rect.width * b.rect.height))[0]?.element || null;
+      .sort((a, b) => {
+        const aHeading = a.element.matches("h1, h2, h3, [role='heading']") ? 0 : 1;
+        const bHeading = b.element.matches("h1, h2, h3, [role='heading']") ? 0 : 1;
+
+        if (aHeading !== bHeading) {
+          return aHeading - bHeading;
+        }
+
+        return Math.abs(a.rect.top - (window.innerHeight * 0.3)) - Math.abs(b.rect.top - (window.innerHeight * 0.3));
+      })[0]?.element || null;
   };
 
   const syncInlineToggle = () => {
@@ -291,16 +309,15 @@
     button.title = options.enabled ? "자동 임시 채팅 켜짐" : "자동 임시 채팅 꺼짐";
 
     if (!marker) {
-      container.style.top = "84px";
-      container.style.left = "";
-      container.style.right = "16px";
+      container.hidden = true;
       return;
     }
 
+    container.hidden = false;
     const markerRect = marker.getBoundingClientRect();
     const toggleWidth = container.offsetWidth || 74;
-    const left = Math.min(markerRect.right + 8, window.innerWidth - toggleWidth - 12);
-    const top = Math.max(12, markerRect.top + (markerRect.height - container.offsetHeight) / 2);
+    const left = Math.min(markerRect.right + 12, window.innerWidth - toggleWidth - 16);
+    const top = Math.max(16, markerRect.top + (markerRect.height - container.offsetHeight) / 2);
 
     container.style.top = `${Math.round(top)}px`;
     container.style.left = `${Math.round(left)}px`;
@@ -319,23 +336,37 @@
   };
 
   const setEnabled = (enabled) => {
-    options = normalizeOptions({ ...options, enabled });
+    const nextOptions = normalizeOptions({ ...options, enabled });
+    options = nextOptions;
+    scheduleInlineToggleSync();
 
-    chrome.storage?.sync?.set({
+    const afterSave = () => {
+      if (chrome.runtime?.lastError) {
+        log("Failed to save enabled state", chrome.runtime.lastError.message);
+        options = normalizeOptions({ ...options, enabled: !enabled });
+        scheduleInlineToggleSync();
+        return;
+      }
+
+      if (enabled) {
+        applyTemporaryChatMode("inline-toggle");
+        return;
+      }
+
+      restorePatchedLinks();
+    };
+
+    if (!chrome.storage?.sync) {
+      afterSave();
+      return;
+    }
+
+    chrome.storage.sync.set({
       enabled,
       redirectNewChats: true,
       patchNewChatLinks: true,
       clickVisibleToggle: true
-    });
-
-    scheduleInlineToggleSync();
-
-    if (enabled) {
-      applyTemporaryChatMode("inline-toggle");
-      return;
-    }
-
-    restorePatchedLinks();
+    }, afterSave);
   };
 
   const getExplicitCheckedState = (element) => {
@@ -574,7 +605,7 @@
         return false;
       }
 
-      applyTemporaryChatMode("popup");
+      refreshOptions().then(() => applyTemporaryChatMode("popup"));
       sendResponse({ ok: true });
       return false;
     });

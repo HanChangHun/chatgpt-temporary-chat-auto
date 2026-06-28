@@ -31,6 +31,12 @@
       patchNewChatLinks: true,
       clickVisibleToggle: true
     }, () => {
+      if (chrome.runtime.lastError) {
+        enabled.checked = !input.checked;
+        setStatus("저장 실패");
+        return;
+      }
+
       setStatus("저장됨");
     });
   };
@@ -52,6 +58,13 @@
       setStatus("적용됨");
     });
   };
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "sync" && changes.enabled) {
+      enabled.checked = Boolean(changes.enabled.newValue);
+      setStatus("저장됨");
+    }
+  });
 
   enabled.addEventListener("change", saveOption);
   applyNow.addEventListener("click", sendApplyMessage);
