@@ -55,6 +55,11 @@ This is an unofficial extension and is not affiliated with OpenAI.
   - 사용자 데이터 수집 안 함
 - Remote code:
   - 없음
+- 전용 목적 설명:
+
+```text
+Automatically open new ChatGPT chats in Temporary Chat mode. The extension updates ChatGPT new chat URLs and New chat links so they include the Temporary Chat URL parameter, and it stores only the user's extension preferences.
+```
 
 ## 6. 권한 설명
 
@@ -69,6 +74,18 @@ Allows the extension to run on ChatGPT pages so it can add the Temporary Chat UR
 ### https://chat.openai.com/*
 
 Supports the older ChatGPT domain for users who are still routed through chat.openai.com.
+
+### 호스트 권한 사용 근거 칸이 하나만 있는 경우
+
+```text
+Required to run only on chatgpt.com and chat.openai.com so the extension can update New chat links with the Temporary Chat URL parameter and apply the user's Temporary Chat preference. The extension does not collect, transmit, or store ChatGPT conversation content.
+```
+
+## 6.1 게시자 연락처 이메일
+
+- 왼쪽 `설정` > `프로필`에서 연락처 이메일을 추가하고 인증합니다.
+- 개인 이메일을 공개하고 싶지 않다면 GitHub용 별도 이메일이나 새 Gmail alias를 쓰는 편이 좋습니다.
+- 이 항목은 이메일 인증이 완료되어야 제출 가능 상태가 됩니다.
 
 ## 7. 심사자 테스트 안내
 
