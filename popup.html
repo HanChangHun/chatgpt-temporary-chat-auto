@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Temporary Chat Auto</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="popup">
+      <header class="header">
+        <div>
+          <h1>Temporary Chat Auto</h1>
+          <p id="status">준비됨</p>
+        </div>
+      </header>
+
+      <label class="switch-row">
+        <span>
+          <strong>자동 임시 채팅</strong>
+          <small>새 ChatGPT 대화를 임시 채팅으로 엽니다.</small>
+        </span>
+        <input id="enabled" type="checkbox">
+      </label>
+
+      <section class="options" aria-label="옵션">
+        <label>
+          <input id="redirectNewChats" type="checkbox">
+          <span>새 채팅 URL 보정</span>
+        </label>
+        <label>
+          <input id="patchNewChatLinks" type="checkbox">
+          <span>New chat 링크 보정</span>
+        </label>
+        <label>
+          <input id="clickVisibleToggle" type="checkbox">
+          <span>보이는 토글 자동 켜기</span>
+        </label>
+      </section>
+
+      <button id="applyNow" type="button">현재 탭에 적용</button>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
