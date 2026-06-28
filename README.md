@@ -1,40 +1,46 @@
 # ChatGPT Temporary Chat Auto
 
-ChatGPT 새 대화를 자동으로 Temporary Chat 모드로 열어 주는 Chrome Manifest V3 확장입니다.
+Automatically open new ChatGPT chats with Temporary Chat enabled.
 
 This is an unofficial extension and is not affiliated with OpenAI.
 
+[한국어 README](README_KO.md)
+
 ## Features
 
-- Automatically opens new ChatGPT chats with `temporary-chat=true`.
+- Opens new ChatGPT chats with `temporary-chat=true`.
 - Patches New chat links on `chatgpt.com` and `chat.openai.com`.
-- Adds a small in-page toggle near ChatGPT's Temporary Chat indicator.
-- Stores only the single on/off preference in Chrome sync storage.
+- Adds a compact in-page toggle near ChatGPT's Temporary Chat indicator.
+- Keeps the popup simple with one on/off control.
+- Stores only the user's on/off preference in Chrome sync storage.
 
-## 설치
+## Installation
 
-1. Chrome에서 `chrome://extensions`를 엽니다.
-2. 오른쪽 위 `Developer mode`를 켭니다.
-3. `Load unpacked`를 누르고 이 폴더를 선택합니다.
+### Chrome Web Store
 
-## 동작 방식
+The extension has been submitted to the Chrome Web Store and is waiting for review.
 
-- `https://chatgpt.com/`과 `https://chat.openai.com/`에서만 동작합니다.
-- 새 채팅 URL과 New chat 링크에 `temporary-chat=true` 파라미터를 붙입니다.
-- 화면에 Temporary Chat 토글이 보이고 꺼진 상태가 명확할 때만 클릭합니다.
-- 팝업에서는 자동 적용을 하나의 체크박스로 켜고 끌 수 있습니다.
-- ChatGPT 화면 안의 작은 토글로도 자동 적용을 바로 켜고 끌 수 있습니다.
+### Manual install
 
-## 메모
+1. Download the latest store package from [Releases](https://github.com/HanChangHun/chatgpt-temporary-chat-auto/releases).
+2. Unzip the package.
+3. Open `chrome://extensions` in Chrome.
+4. Enable `Developer mode`.
+5. Click `Load unpacked` and select the unzipped folder.
 
-ChatGPT 화면 구조는 바뀔 수 있어서 URL 보정을 우선 사용합니다. UI가 바뀌어 토글 클릭이 동작하지 않아도 새 채팅 링크 보정은 비교적 오래 버틸 가능성이 높습니다.
+## How It Works
+
+- The extension runs only on `https://chatgpt.com/*` and `https://chat.openai.com/*`.
+- It updates new-chat URLs and New chat links with the `temporary-chat=true` parameter.
+- If ChatGPT exposes a visible Temporary Chat toggle and it is clearly off, the extension can turn it on.
+- The popup and in-page toggle both control the same single preference.
 
 ## Privacy
 
-The extension does not collect, transmit, sell, or share user data. It does not read or send ChatGPT conversation content to any server. See [PRIVACY.md](PRIVACY.md).
+The extension does not collect, transmit, sell, or share user data. It does not read or send ChatGPT conversation content to any server.
 
-Public privacy policy URL: https://github.com/HanChangHun/chatgpt-temporary-chat-auto/blob/main/PRIVACY.md
+See [PRIVACY.md](PRIVACY.md).
 
-## Chrome Web Store
+## Publishing Notes
 
-Store listing copy, privacy answers, and review notes are in [store/STORE_LISTING.md](store/STORE_LISTING.md).
+Chrome Web Store listing copy, privacy answers, permission justifications, and the Korean submission checklist are in [store/](store/).
