@@ -3,13 +3,8 @@
 
   const INLINE_TOGGLE_ID = "temporary-chat-auto-inline-toggle";
   const TEMPORARY_PARAM = "temporary-chat";
-  // NOTE: keep this in sync with DEFAULT_OPTIONS in popup.js (the content
-  // script and the popup do not share a module).
   const DEFAULT_OPTIONS = {
     enabled: true,
-    redirectNewChats: true,
-    patchNewChatLinks: true,
-    clickVisibleToggle: true,
     debug: false
   };
 
@@ -59,17 +54,7 @@
       });
     });
 
-  // The popup only exposes the master `enabled` switch; the other three
-  // behaviors are always-on internals. Force them true here so a stale `false`
-  // left in storage by an older multi-toggle build can never silently disable
-  // a behavior with no UI to turn it back on.
-  const normalizeOptions = (items) => ({
-    ...DEFAULT_OPTIONS,
-    ...items,
-    redirectNewChats: true,
-    patchNewChatLinks: true,
-    clickVisibleToggle: true
-  });
+  const normalizeOptions = (items) => ({ ...DEFAULT_OPTIONS, ...items });
 
   const refreshOptions = async () => {
     options = normalizeOptions(await storageGet(DEFAULT_OPTIONS));
@@ -415,9 +400,8 @@
       return;
     }
 
-    // Persist only the master switch. The other flags are always-on internals
-    // (forced true in normalizeOptions), so writing them on every click would
-    // only burn the storage.sync write quota and make rapid toggling fail.
+    // `enabled` is the only persisted setting; writing just that key keeps the
+    // storage.sync write volume minimal so rapid toggling never hits the quota.
     chrome.storage.sync.set({ enabled }, afterSave);
   };
 
@@ -497,10 +481,6 @@
   };
 
   const clickTemporaryToggleIfClearlyOff = () => {
-    if (!options.clickVisibleToggle) {
-      return false;
-    }
-
     const toggle = findVisibleTemporaryToggle();
 
     if (!toggle) {
@@ -544,10 +524,6 @@
   };
 
   const patchNewChatLinks = () => {
-    if (!options.patchNewChatLinks) {
-      return 0;
-    }
-
     let patched = 0;
 
     for (const anchor of document.querySelectorAll("a[href]")) {
@@ -597,7 +573,7 @@
 
     const anchor = event.target.closest?.("a[href]");
 
-    if (anchor && options.patchNewChatLinks) {
+    if (anchor) {
       const patched = patchAnchor(anchor);
 
       if (patched && !shouldIgnoreModifiedClick(event)) {
@@ -644,7 +620,6 @@
       const temporaryHref = withTemporaryParam(currentUrl.href);
 
       if (
-        options.redirectNewChats &&
         temporaryHref &&
         temporaryHref !== currentUrl.href &&
         isLikelyNewChatPath(currentUrl) &&

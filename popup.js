@@ -1,16 +1,6 @@
 (() => {
   "use strict";
 
-  // NOTE: keep this in sync with DEFAULT_OPTIONS in content.js (the popup and
-  // the content script do not share a module).
-  const DEFAULT_OPTIONS = {
-    enabled: true,
-    redirectNewChats: true,
-    patchNewChatLinks: true,
-    clickVisibleToggle: true,
-    debug: false
-  };
-
   const enabled = document.querySelector("#enabled");
   const status = document.querySelector("#status");
   const applyNow = document.querySelector("#applyNow");
@@ -20,20 +10,15 @@
   };
 
   const loadOptions = () => {
-    chrome.storage.sync.get(DEFAULT_OPTIONS, (items) => {
-      const values = chrome.runtime.lastError ? DEFAULT_OPTIONS : items;
-      enabled.checked = Boolean(values.enabled);
+    chrome.storage.sync.get({ enabled: true }, (items) => {
+      const value = chrome.runtime.lastError ? true : items.enabled;
+      enabled.checked = Boolean(value);
     });
   };
 
   const saveOption = (event) => {
     const input = event.currentTarget;
-    chrome.storage.sync.set({
-      enabled: input.checked,
-      redirectNewChats: true,
-      patchNewChatLinks: true,
-      clickVisibleToggle: true
-    }, () => {
+    chrome.storage.sync.set({ enabled: input.checked }, () => {
       if (chrome.runtime.lastError) {
         enabled.checked = !input.checked;
         setStatus("저장 실패");

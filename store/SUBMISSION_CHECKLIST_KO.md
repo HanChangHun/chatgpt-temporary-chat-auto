@@ -10,7 +10,7 @@
 
 - Chrome Web Store Developer Dashboard에서 `새 항목` 또는 `New item`을 선택합니다.
 - 업로드 파일:
-  - `C:\Users\ehwjs\workspaces\chatgpt-temporary-chat-auto-0.1.0-store.zip`
+  - `C:\Users\ehwjs\workspaces\chatgpt-temporary-chat-auto-0.1.4-store.zip`
 
 ## 3. 스토어 등록정보
 
@@ -26,7 +26,7 @@ ChatGPT Temporary Chat Auto keeps new ChatGPT conversations in Temporary Chat mo
 
 It works on chatgpt.com and chat.openai.com, updates New chat links to include the Temporary Chat URL parameter, and can enable a visible Temporary Chat toggle when the page clearly shows it as off.
 
-The popup lets users turn the automation on or off and control each behavior separately.
+The popup provides one simple on/off control, and the ChatGPT page can show a compact in-page toggle near the Temporary Chat indicator.
 
 Privacy-first behavior:
 
@@ -65,7 +65,7 @@ Automatically open new ChatGPT chats in Temporary Chat mode. The extension updat
 
 ### storage
 
-Stores the user's extension preferences, such as whether automatic Temporary Chat mode and optional link/toggle behaviors are enabled.
+Stores the user's extension preference, specifically whether automatic Temporary Chat mode is enabled.
 
 ### https://chatgpt.com/*
 

@@ -42,7 +42,7 @@ Automatically open new ChatGPT chats in Temporary Chat mode.
 
 ### storage
 
-Stores the user's extension preferences, such as whether automatic Temporary Chat mode and optional link/toggle behaviors are enabled.
+Stores the user's extension preference, specifically whether automatic Temporary Chat mode is enabled.
 
 ### Host permission: https://chatgpt.com/*
 
