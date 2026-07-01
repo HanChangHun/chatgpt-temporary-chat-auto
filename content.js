@@ -7,6 +7,12 @@
     enabled: true,
     debug: false
   };
+  const DEFAULT_MESSAGES = {
+    inlineToggleAriaLabel: "Toggle automatic Temporary Chat",
+    inlineToggleLabel: "Auto",
+    inlineToggleTitleOff: "Automatic Temporary Chat off",
+    inlineToggleTitleOn: "Automatic Temporary Chat on"
+  };
 
   const NEW_CHAT_TEXT = [
     "new chat",
@@ -39,6 +45,14 @@
   const log = (...args) => {
     if (options.debug) {
       console.debug("[Temporary Chat Auto]", ...args);
+    }
+  };
+
+  const t = (key) => {
+    try {
+      return chrome.i18n?.getMessage(key) || DEFAULT_MESSAGES[key] || "";
+    } catch {
+      return DEFAULT_MESSAGES[key] || "";
     }
   };
 
@@ -253,8 +267,8 @@
     container = document.createElement("div");
     container.id = INLINE_TOGGLE_ID;
     container.innerHTML = `
-      <button type="button" aria-label="Toggle automatic Temporary Chat" aria-pressed="true">
-        <span>자동</span>
+      <button type="button" aria-pressed="true">
+        <span class="temporary-chat-auto-label"></span>
         <span class="temporary-chat-auto-switch" aria-hidden="true">
           <span class="temporary-chat-auto-knob"></span>
         </span>
@@ -311,11 +325,16 @@
   const syncInlineToggle = () => {
     const container = createInlineToggle();
     const button = container.querySelector("button");
+    const label = container.querySelector(".temporary-chat-auto-label");
     const anchor = findTemporaryChatAnchor();
 
+    if (label) {
+      label.textContent = t("inlineToggleLabel");
+    }
     container.classList.toggle("is-enabled", options.enabled);
+    button.setAttribute("aria-label", t("inlineToggleAriaLabel"));
     button.setAttribute("aria-pressed", String(options.enabled));
-    button.title = options.enabled ? "자동 임시 채팅 켜짐" : "자동 임시 채팅 꺼짐";
+    button.title = options.enabled ? t("inlineToggleTitleOn") : t("inlineToggleTitleOff");
 
     const toggleWidth = container.offsetWidth || 74;
     const toggleHeight = container.offsetHeight || 28;

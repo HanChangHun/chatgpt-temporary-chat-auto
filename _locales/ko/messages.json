@@ -1,0 +1,56 @@
+{
+  "extensionActionTitle": {
+    "message": "Temporary Chat Auto"
+  },
+  "extensionDescription": {
+    "message": "새 ChatGPT 대화를 자동으로 임시 채팅으로 엽니다. 비공식 확장입니다."
+  },
+  "extensionName": {
+    "message": "ChatGPT Temporary Chat Auto"
+  },
+  "extensionShortName": {
+    "message": "Temp Chat Auto"
+  },
+  "inlineToggleAriaLabel": {
+    "message": "자동 임시 채팅 전환"
+  },
+  "inlineToggleLabel": {
+    "message": "자동"
+  },
+  "inlineToggleTitleOff": {
+    "message": "자동 임시 채팅 꺼짐"
+  },
+  "inlineToggleTitleOn": {
+    "message": "자동 임시 채팅 켜짐"
+  },
+  "popupApplyButton": {
+    "message": "현재 탭에 적용"
+  },
+  "popupAutoDescription": {
+    "message": "새 ChatGPT 대화를 임시 채팅으로 엽니다."
+  },
+  "popupAutoTitle": {
+    "message": "자동 임시 채팅"
+  },
+  "popupSupportLink": {
+    "message": "개발 후원하기"
+  },
+  "statusApplied": {
+    "message": "적용됨"
+  },
+  "statusNoActiveTab": {
+    "message": "활성 탭 없음"
+  },
+  "statusOpenChatGptTab": {
+    "message": "ChatGPT 탭에서 사용 가능"
+  },
+  "statusReady": {
+    "message": "준비됨"
+  },
+  "statusSaveFailed": {
+    "message": "저장 실패"
+  },
+  "statusSaved": {
+    "message": "저장됨"
+  }
+}

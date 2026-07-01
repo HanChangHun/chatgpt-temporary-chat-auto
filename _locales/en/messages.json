@@ -1,0 +1,56 @@
+{
+  "extensionActionTitle": {
+    "message": "Temporary Chat Auto"
+  },
+  "extensionDescription": {
+    "message": "Automatically opens new ChatGPT chats with Temporary Chat enabled. Unofficial extension."
+  },
+  "extensionName": {
+    "message": "ChatGPT Temporary Chat Auto"
+  },
+  "extensionShortName": {
+    "message": "Temp Chat Auto"
+  },
+  "inlineToggleAriaLabel": {
+    "message": "Toggle automatic Temporary Chat"
+  },
+  "inlineToggleLabel": {
+    "message": "Auto"
+  },
+  "inlineToggleTitleOff": {
+    "message": "Automatic Temporary Chat off"
+  },
+  "inlineToggleTitleOn": {
+    "message": "Automatic Temporary Chat on"
+  },
+  "popupApplyButton": {
+    "message": "Apply to current tab"
+  },
+  "popupAutoDescription": {
+    "message": "Open new ChatGPT conversations in Temporary Chat."
+  },
+  "popupAutoTitle": {
+    "message": "Auto Temporary Chat"
+  },
+  "popupSupportLink": {
+    "message": "Support development"
+  },
+  "statusApplied": {
+    "message": "Applied"
+  },
+  "statusNoActiveTab": {
+    "message": "No active tab"
+  },
+  "statusOpenChatGptTab": {
+    "message": "Open a ChatGPT tab"
+  },
+  "statusReady": {
+    "message": "Ready"
+  },
+  "statusSaveFailed": {
+    "message": "Save failed"
+  },
+  "statusSaved": {
+    "message": "Saved"
+  }
+}

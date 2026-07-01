@@ -41,6 +41,10 @@ ChatGPT 새 대화를 자동으로 Temporary Chat 모드로 열어 주는 Chrome
 
 자세한 내용은 [PRIVACY.md](PRIVACY.md)를 확인하세요.
 
+## 후원
+
+이 확장이 도움이 되었다면 [Ko-fi에서 개발을 후원](https://ko-fi.com/edgepu)할 수 있습니다. 후원은 선택 사항이며, 후원 여부와 관계없이 확장의 핵심 기능은 계속 사용할 수 있습니다.
+
 ## 배포 메모
 
 Chrome Web Store 등록 문구, 개인정보 답변, 권한 설명, 한국어 제출 체크리스트는 [store/](store/) 폴더에 남겨 두었습니다. 다음 업데이트 때 다시 쓰기 좋아서 삭제하지 않고 보관합니다.

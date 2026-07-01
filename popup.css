@@ -93,9 +93,26 @@ button:hover {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+a:focus-visible {
   outline: 3px solid #99f6e4;
   outline-offset: 2px;
+}
+
+.support {
+  margin: -2px 0 0;
+  text-align: center;
+}
+
+.support a {
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.support a:hover {
+  text-decoration: underline;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -112,6 +129,10 @@ input:focus-visible {
   p,
   small {
     color: #a1a1aa;
+  }
+
+  .support a {
+    color: #5eead4;
   }
 
 }

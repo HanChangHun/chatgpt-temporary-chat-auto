@@ -6,23 +6,15 @@ ChatGPT Temporary Chat Auto
 
 ## Short Description
 
-Automatically opens new ChatGPT chats with Temporary Chat enabled. Unofficial extension; no data collection.
+Automatically opens new ChatGPT chats with Temporary Chat enabled. Unofficial extension.
 
 ## Detailed Description
 
-ChatGPT Temporary Chat Auto keeps new ChatGPT conversations in Temporary Chat mode by default.
+ChatGPT Temporary Chat Auto makes Temporary Chat the default for new ChatGPT conversations.
 
-It works on `chatgpt.com` and `chat.openai.com`, updates New chat links to include the Temporary Chat URL parameter, and can enable a visible Temporary Chat toggle when the page clearly shows it as off.
+When you open ChatGPT or click New chat, the extension keeps the Temporary Chat URL parameter in place so new chats start in Temporary Chat mode. It works on `chatgpt.com` and `chat.openai.com`.
 
-The popup provides one simple on/off control, and the ChatGPT page can show a compact in-page toggle near the Temporary Chat indicator.
-
-Privacy-first behavior:
-
-- No analytics
-- No remote code
-- No external network requests from the extension
-- No collection or transmission of ChatGPT conversation content
-- Only extension preferences are stored with Chrome storage
+Use the popup to turn automatic Temporary Chat on or off. On the ChatGPT page, a compact Auto toggle can appear near the Temporary Chat indicator for quick control.
 
 This is an unofficial extension and is not affiliated with OpenAI.
 
@@ -80,6 +72,7 @@ No test credentials are required. The reviewer can test with any ChatGPT account
 
 - Icon: `icons/icon-128.png`
 - Small promotional image: `store/assets/promo-small-440x280.png`
+- Marquee promotional image: `store/assets/promo-marquee-1400x560.png`
 - Screenshot: `store/assets/screenshot-1280x800.png`
 
 ## Korean Submission Checklist

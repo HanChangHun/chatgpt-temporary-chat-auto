@@ -41,6 +41,10 @@ The extension does not collect, transmit, sell, or share user data. It does not 
 
 See [PRIVACY.md](PRIVACY.md).
 
+## Support
+
+If this extension is useful to you, you can [support development on Ko-fi](https://ko-fi.com/edgepu). Donations are optional and will never be required for the extension's core functionality.
+
 ## Publishing Notes
 
 Chrome Web Store listing copy, privacy answers, permission justifications, and the Korean submission checklist are in [store/](store/).

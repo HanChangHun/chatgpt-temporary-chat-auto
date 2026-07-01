@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,20 +10,24 @@
     <main class="popup">
       <header class="header">
         <div>
-          <h1>Temporary Chat Auto</h1>
-          <p id="status" role="status" aria-live="polite">준비됨</p>
+          <h1 data-i18n="extensionActionTitle">Temporary Chat Auto</h1>
+          <p id="status" role="status" aria-live="polite" data-i18n="statusReady">Ready</p>
         </div>
       </header>
 
       <label class="switch-row">
         <span>
-          <strong>자동 임시 채팅</strong>
-          <small>새 ChatGPT 대화를 임시 채팅으로 엽니다.</small>
+          <strong data-i18n="popupAutoTitle">Auto Temporary Chat</strong>
+          <small data-i18n="popupAutoDescription">Open new ChatGPT conversations in Temporary Chat.</small>
         </span>
         <input id="enabled" type="checkbox">
       </label>
 
-      <button id="applyNow" type="button">현재 탭에 적용</button>
+      <button id="applyNow" type="button" data-i18n="popupApplyButton">Apply to current tab</button>
+
+      <p class="support">
+        <a href="https://ko-fi.com/edgepu" target="_blank" rel="noopener noreferrer" data-i18n="popupSupportLink">Support development</a>
+      </p>
     </main>
     <script src="popup.js"></script>
   </body>

@@ -3,3 +3,5 @@
 *.pem
 .DS_Store
 Thumbs.db
+store/source/logo-generated-chroma.png
+store/source/logo-generated-transparent.png

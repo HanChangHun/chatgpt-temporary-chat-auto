@@ -4,6 +4,37 @@
   const enabled = document.querySelector("#enabled");
   const status = document.querySelector("#status");
   const applyNow = document.querySelector("#applyNow");
+  const DEFAULT_MESSAGES = {
+    extensionActionTitle: "Temporary Chat Auto",
+    popupApplyButton: "Apply to current tab",
+    popupAutoDescription: "Open new ChatGPT conversations in Temporary Chat.",
+    popupAutoTitle: "Auto Temporary Chat",
+    popupSupportLink: "Support development",
+    statusApplied: "Applied",
+    statusNoActiveTab: "No active tab",
+    statusOpenChatGptTab: "Open a ChatGPT tab",
+    statusReady: "Ready",
+    statusSaveFailed: "Save failed",
+    statusSaved: "Saved"
+  };
+
+  const t = (key) => {
+    try {
+      return chrome.i18n?.getMessage(key) || DEFAULT_MESSAGES[key] || "";
+    } catch {
+      return DEFAULT_MESSAGES[key] || "";
+    }
+  };
+
+  const applyMessages = () => {
+    const language = chrome.i18n?.getUILanguage?.() || "en";
+    document.documentElement.lang = language.split("-")[0] || "en";
+    document.title = t("extensionActionTitle");
+
+    for (const element of document.querySelectorAll("[data-i18n]")) {
+      element.textContent = t(element.dataset.i18n);
+    }
+  };
 
   const setStatus = (message) => {
     status.textContent = message;
@@ -21,11 +52,11 @@
     chrome.storage.sync.set({ enabled: input.checked }, () => {
       if (chrome.runtime.lastError) {
         enabled.checked = !input.checked;
-        setStatus("저장 실패");
+        setStatus(t("statusSaveFailed"));
         return;
       }
 
-      setStatus("저장됨");
+      setStatus(t("statusSaved"));
     });
   };
 
@@ -33,28 +64,29 @@
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
     if (!tab?.id) {
-      setStatus("활성 탭 없음");
+      setStatus(t("statusNoActiveTab"));
       return;
     }
 
     chrome.tabs.sendMessage(tab.id, { type: "TEMPORARY_CHAT_AUTO_APPLY" }, () => {
       if (chrome.runtime.lastError) {
-        setStatus("ChatGPT 탭에서 사용 가능");
+        setStatus(t("statusOpenChatGptTab"));
         return;
       }
 
-      setStatus("적용됨");
+      setStatus(t("statusApplied"));
     });
   };
 
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === "sync" && changes.enabled) {
       enabled.checked = Boolean(changes.enabled.newValue);
-      setStatus("저장됨");
+      setStatus(t("statusSaved"));
     }
   });
 
   enabled.addEventListener("change", saveOption);
   applyNow.addEventListener("click", sendApplyMessage);
+  applyMessages();
   loadOptions();
 })();
