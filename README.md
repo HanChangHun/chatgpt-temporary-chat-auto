@@ -45,6 +45,10 @@ See [PRIVACY.md](PRIVACY.md).
 
 If this extension is useful to you, you can [support development on Ko-fi](https://ko-fi.com/edgepu). Donations are optional and will never be required for the extension's core functionality.
 
+## License and Branding
+
+The source code and documentation are available under the MIT License. The project name, icon, store screenshots, promotional images, and other branding assets are not covered by that license. See [TRADEMARKS.md](TRADEMARKS.md).
+
 ## Publishing Notes
 
 Chrome Web Store listing copy, privacy answers, permission justifications, and the Korean submission checklist are in [store/](store/).
